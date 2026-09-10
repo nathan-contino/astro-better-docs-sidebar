@@ -52,27 +52,30 @@ function buildTree(pages: any[]) {
 
       if (part === 'index') {
         const effective: FolderBehavior = pageFolderBehavior || folderBehavior;
-        const href = `${basePath}/${slug.replace(/\/index$/, "")}`.replace(/\/+/g, '/').replace(/\/$/, "");
 
         current.title = label || dataTitle || current.title;
         if (order !== undefined) current.order = order;
 
-        if (effective === 'page') {
-          current.href = href;
-        } else if (effective === 'overview') {
-          // inject a synthetic first child that links to the index page
-          current.children['__sidebar_overview__'] = {
-            name: '__sidebar_overview__',
-            title: overviewLabel,
-            href,
-            children: {},
-            sortedChildren: [],
-            isOpen: false,
-            isActive: false,
-            order: -Infinity,
-          };
+        // route: false pages still contribute title/order but produce no link
+        if (page.data?.route !== false) {
+          const href = `${basePath}/${slug.replace(/\/index$/, "")}`.replace(/\/+/g, '/').replace(/\/$/, "");
+          if (effective === 'page') {
+            current.href = href;
+          } else if (effective === 'overview') {
+            // inject a synthetic first child that links to the index page
+            current.children['__sidebar_overview__'] = {
+              name: '__sidebar_overview__',
+              title: overviewLabel,
+              href,
+              children: {},
+              sortedChildren: [],
+              isOpen: false,
+              isActive: false,
+              order: -Infinity,
+            };
+          }
+          // 'unclickable': no href set, no overview child
         }
-        // 'unclickable': no href set, no overview child
         break;
       }
 
