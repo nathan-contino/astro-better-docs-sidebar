@@ -122,6 +122,38 @@ hidden: true
 ---
 ```
 
+## Non-routable folder index pages
+
+Set `route: false` in a folder's `index.mdx` to prevent the sidebar from linking to it while still using it to set the folder's title and `order`. The folder heading appears as a plain label with no link.
+
+```yaml
+# docs/core-concepts/index.mdx
+---
+title: Core Concepts
+order: 2
+route: false
+---
+```
+
+This is equivalent to `sidebar.folderBehavior: unclickable` but scoped to the index page itself rather than the `folderBehavior` prop. Use it when a folder should never have a clickable header, regardless of the global `folderBehavior` setting.
+
+Make sure your content collection schema includes `route`:
+
+```ts
+const docs = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    order: z.number().optional(),
+    hidden: z.boolean().optional(),
+    route: z.boolean().optional(),
+    sidebar: z.object({
+      label: z.string().optional(),
+      folderBehavior: z.enum(['page', 'unclickable', 'overview']).optional(),
+    }).optional(),
+  }),
+});
+```
+
 ## Controlling sort order
 
 Set `order` in front matter to control sort position within a folder. Lower numbers sort first. Pages without `order` sort last, then alphabetically by title.
