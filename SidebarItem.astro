@@ -11,18 +11,17 @@ const isAnc = node.isActive && !node.isCurrentPage;
 
 {childNodes.length > 0 ? (
   <details open={node.isOpen || undefined}>
-    <summary class="s" data-a={isAnc || undefined}>
+    <summary data-a={isAnc || undefined}>
       {node.href ? (
         <a
           href={`${node.href}/`}
-          class="l"
           aria-current={node.isCurrentPage ? "page" : undefined}
           set:html={htmlTitle}
         ></a>
       ) : (
-        <span class="l" set:html={htmlTitle}></span>
+        <span set:html={htmlTitle}></span>
       )}
-      <i class="c"></i>
+      <i></i>
     </summary>
     <div>
       {childNodes.map((child: any) => <Astro.self node={child} />)}
@@ -31,7 +30,6 @@ const isAnc = node.isActive && !node.isCurrentPage;
 ) : (
   <a
     href={node.href}
-    class="l"
     aria-current={node.isCurrentPage ? "page" : undefined}
     data-a={isAnc || undefined}
     set:html={htmlTitle}
